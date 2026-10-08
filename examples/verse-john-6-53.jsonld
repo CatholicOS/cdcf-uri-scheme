@@ -1,0 +1,36 @@
+{
+  "@context": {
+    "cdcf": "https://id.catholiccommons.org/",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+  },
+  "@id": "cdcf:verse/john/6/53",
+  "@type": "cdcf:BibleVerse",
+  "book": "cdcf:book/john",
+  "chapter": 6,
+  "verse": 53,
+  "osisRef": "John.6.53",
+  "licenses": {
+    "*": "public-domain",
+    "text.en-RSVCE": "proprietary-licensed",
+    "text.en-NABRE": "proprietary-licensed"
+  },
+  "text": {
+    "la-Vulgata": "Dixit ergo eis Iesus: Amen amen dico vobis: nisi manducaveritis carnem Filii hominis, et biberitis eius sanguinem, non habebitis vitam in vobis.",
+    "en-DRC": "Then Jesus said to them: Amen, amen I say unto you: Except you eat the flesh of the Son of man, and drink his blood, you shall not have life in you."
+  },
+  "crossReferences": [
+    {
+      "@type": "cdcf:rel/magisterial-proof-text",
+      "target": "cdcf:concept/CN0007",
+      "targetNotation": "real-presence",
+      "citedIn": "cdcf:magisterium/trent/decree-eucharist/canon/1"
+    },
+    {
+      "@type": "cdcf:rel/patristic-interpretation",
+      "target": "cdcf:concept/CN0007",
+      "targetNotation": "real-presence",
+      "citedIn": "cdcf:work/cyril-of-alexandria-commentary-on-john"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+name: Validate cdcf: spec
+
+on:
+  pull_request:
+    paths:
+      - 'spec/**'
+      - 'examples/**'
+      - 'scripts/**'
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validate ABNF grammar compiles
+        run: node scripts/validate-grammar.js spec/appendix-d-abnf.abnf
+
+      - name: Validate JSON-LD examples are well-formed
+        run: node scripts/validate-jsonld.js examples/
+
+      - name: Validate example identifiers against grammar
+        run: node scripts/validate-identifiers.js spec/appendix-d-abnf.abnf examples/
+
+      - name: Check for duplicate vocabulary keys in domain tables
+        run: |
+          node scripts/check-duplicate-vocab.js spec/03-domains.md
+          node scripts/check-duplicate-vocab.js spec/appendix-b-eastern-churches.md

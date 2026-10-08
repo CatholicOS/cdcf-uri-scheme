@@ -1,0 +1,27 @@
+# CODEOWNERS — enforces required review on theologically/canonically sensitive
+# sections per spec/06-governance.md §6.3.
+#
+# Replace these placeholder GitHub handles with the actual CDCF Technical
+# Advisory Group members before enabling branch protection. GitHub requires
+# at least one matching owner to approve before a PR touching these paths
+# can be merged, when "Require review from Code Owners" is enabled in the
+# repository's branch protection settings.
+
+# Theological authority taxonomy — requires theologian sign-off
+/spec/05-authority.md            @cdcf/theology-reviewers
+
+# Document type / papal approval vocab, magisterium domain, concept domain
+# (definitions, notation revisions), and the persons-as-ontology-individuals
+# rule (§3.6.1) — requires both theologian and canonist sign-off
+/spec/03-domains.md              @cdcf/theology-reviewers @cdcf/canon-law-reviewers
+
+# Canon law domain and authentic interpretations — canonist sign-off
+/spec/06-governance.md           @cdcf/canon-law-reviewers
+
+# The normative grammar — any change here affects every implementation;
+# requires a maintainer with software-architecture review responsibility
+/spec/appendix-d-abnf.abnf       @cdcf/spec-maintainers
+
+# Default: editorial changes (typos, examples, non-normative prose) can be
+# merged by any listed maintainer without additional review.
+*                                 @cdcf/spec-maintainers

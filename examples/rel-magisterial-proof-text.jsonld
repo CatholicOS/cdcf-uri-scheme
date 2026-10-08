@@ -1,0 +1,13 @@
+{
+  "@context": {
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "cdcf": "https://id.catholiccommons.org/"
+  },
+  "@id": "cdcf:rel/magisterial-proof-text",
+  "@type": "owl:ObjectProperty",
+  "rdfs:label": "magisterial proof text",
+  "rdfs:comment": "The subject is cited by the Magisterium as a scriptural foundation for the object doctrine or concept.",
+  "rdfs:domain": "cdcf:BibleVerse",
+  "rdfs:range": "cdcf:Concept"
+}

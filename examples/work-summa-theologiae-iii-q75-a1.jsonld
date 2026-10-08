@@ -1,0 +1,12 @@
+{
+  "@context": {
+    "cdcf": "https://id.catholiccommons.org/",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+  },
+  "@id": "cdcf:work/summa-theologiae/iii/q75/a1",
+  "@type": "cdcf:Work",
+  "rdfs:label": "Summa Theologiae III, q. 75, a. 1",
+  "licenses": {
+    "*": "public-domain"
+  }
+}

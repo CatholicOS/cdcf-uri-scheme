@@ -1,0 +1,19 @@
+{
+  "@context": {
+    "cdcf": "https://id.catholiccommons.org/"
+  },
+  "@id": "cdcf:magisterium/ddf/fiducia-supplicans",
+  "@type": "cdcf:MagisterialDocument",
+  "documentType": "declaration",
+  "papalApproval": "in-forma-communi",
+  "authorityLevel": "authentic-doctrine",
+  "magisterialIssuedBy": "cdcf:institution/dicastery/ddf",
+  "datePromulgated": "2023-12-18",
+  "licenses": {
+    "*": "proprietary-licensed"
+  },
+  "title": {
+    "la": "Fiducia Supplicans",
+    "en": "Fiducia Supplicans"
+  }
+}

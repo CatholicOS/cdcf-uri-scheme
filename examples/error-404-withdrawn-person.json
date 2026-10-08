@@ -1,0 +1,6 @@
+{
+  "error": "not-found",
+  "identifier": "cdcf:person/thomas-aquinas/summa-theologiae",
+  "message": "The cdcf:person/ domain was withdrawn in version 0.5.0 (§3.6.1). Works are identified under cdcf:work/; persons are individuals in the CDCF ontology.",
+  "suggestion": "cdcf:work/summa-theologiae"
+}
