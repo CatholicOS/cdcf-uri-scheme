@@ -1,4 +1,4 @@
-name: Validate cdcf: spec
+name: "Validate cdcf: spec"
 
 on:
   pull_request:
