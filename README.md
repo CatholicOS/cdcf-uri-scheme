@@ -66,13 +66,15 @@ The specification is split into sections under [`spec/`](spec/), in reading orde
 | [`05-authority.md`](spec/05-authority.md) | Theological authority metadata (the three levels of assent) |
 | [`06-governance.md`](spec/06-governance.md) | Change process, versioning, theological/canonical review |
 | [`07-security.md`](spec/07-security.md) | Security considerations, open standards alignment |
-| [`08-open-issues.md`](spec/08-open-issues.md) | Open questions for public comment (18) |
+| [`08-open-issues.md`](spec/08-open-issues.md) | Open questions for public comment (10 open; 8 resolved since 0.5.0) |
 | [`09-references.md`](spec/09-references.md) | Normative and informative references |
 | [`appendix-a-osis.md`](spec/appendix-a-osis.md) | OSIS Scripture book code reference |
 | [`appendix-b-eastern-churches.md`](spec/appendix-b-eastern-churches.md) | Eastern Catholic *sui iuris* churches (all 23) |
 | [`appendix-d-abnf.abnf`](spec/appendix-d-abnf.abnf) | **Normative grammar** (machine-readable) |
 
-Worked example resolution responses live in [`examples/`](examples/).
+Worked example resolution responses live in [`examples/`](examples/); grammar test
+vectors (identifiers that must be accepted or rejected) live in
+[`examples/test-vectors/`](examples/test-vectors/).
 
 > **Section numbering.** This repo numbers sections as in earlier repo releases
 > (Terminology lives in `00-abstract.md`), so each section is one lower than in the
@@ -85,8 +87,10 @@ Worked example resolution responses live in [`examples/`](examples/).
    new fields, disputes about an identifier. This is where discussion happens.
 2. **Open a PR** once there's rough consensus on an Issue, or for trivial fixes
    (typos, broken links, formatting).
-3. **CI must pass.** Every PR is automatically checked against the ABNF grammar and the
-   JSON-LD examples (see [`.github/workflows/validate.yml`](.github/workflows/validate.yml)).
+3. **CI must pass.** Every PR is automatically checked against the ABNF grammar, the
+   grammar test vectors, and the JSON-LD examples (see
+   [`.github/workflows/validate.yml`](.github/workflows/validate.yml)). A grammar change
+   must add test vectors — see `06-governance.md` §6.6.
    This catches syntax problems before a human reviewer needs to look at the PR.
 4. **Theological/canonical sign-off is required** for any PR touching:
    - `05-authority.md` (authority levels, assent taxonomy)
@@ -111,6 +115,7 @@ No dependencies beyond Node.js 20:
 node scripts/validate-grammar.js     spec/appendix-d-abnf.abnf
 node scripts/validate-jsonld.js      examples/
 node scripts/validate-identifiers.js spec/appendix-d-abnf.abnf examples/
+node scripts/check-test-vectors.js  spec/appendix-d-abnf.abnf examples/test-vectors/
 node scripts/check-duplicate-vocab.js spec/03-domains.md
 node scripts/check-duplicate-vocab.js spec/appendix-b-eastern-churches.md
 ```

@@ -53,13 +53,18 @@ Run all CI checks (Node 20, no install needed):
 node scripts/validate-grammar.js     spec/appendix-d-abnf.abnf
 node scripts/validate-jsonld.js      examples/
 node scripts/validate-identifiers.js spec/appendix-d-abnf.abnf examples/
+node scripts/check-test-vectors.js  spec/appendix-d-abnf.abnf examples/test-vectors/
 node scripts/check-duplicate-vocab.js spec/03-domains.md
 node scripts/check-duplicate-vocab.js spec/appendix-b-eastern-churches.md
 ```
 
-If you change the ABNF, update `DOMAIN_PATTERNS` in `scripts/validate-identifiers.js` to
-match (they are hand-synced — a known limitation, Open Issue 12). YAML values containing
-`: ` must be quoted (the workflow's `name:` once broke CI this way).
+The validators interpret the ABNF directly (`scripts/lib/abnf.js`, RFC 5234 subset) — there
+are no hand-synced regexes. Quoted strings are matched case-sensitively (§2.3 rule 1).
+Registered values for `code`, `inst-type` and `rel-slug` are read from the tables in
+`spec/03-domains.md` whose first header cell is `Code`, `Institution type` and
+`` `cdcf:rel/` value `` (`scripts/lib/cdcf-id.js`) — keep those headers. Any grammar change
+must add vectors to `examples/test-vectors/{valid,invalid}.txt` (§6.6). YAML values
+containing `: ` must be quoted (the workflow's `name:` once broke CI this way).
 
 Update `CHANGELOG.md` (Keep a Changelog format) for every substantive change.
 
@@ -79,10 +84,11 @@ Do not invent `authorityLevel` values or theological claims in examples.
 
 ## Known defects (not yet fixed)
 
-- `cdcf-id = domain SLASH domain-path` does not bind a path form to its domain, so e.g.
-  `ccc/summa-theologiae` is grammatically valid.
-- `domain-path` is defined only with `=/` (no initial `=`), which RFC 5234 does not allow.
-- `concept-path = %x43.4E 4*8DIGIT` makes `CN0001` and `CN00001` distinct valid IDs.
 - `CODEOWNERS` uses placeholder teams.
+- `osis-book` is any `slug`, so `jn` is grammatically valid (registered book list is
+  Open Issue 2).
+
+(Fixed, unreleased `[REV-05]`: domain-bound `cdcf-id`, the bare `domain-path =/`,
+`concept-num` padding, and `work-path` missing its segment separator.)
 
 See `notes/open-issues-plan.md` for the planned fixes.

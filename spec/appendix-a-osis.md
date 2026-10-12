@@ -23,7 +23,13 @@ list, including all deuterocanonical books.
 >
 > **[REV-03]** Version 0.3.0 listed `Jn` for John and used `jn` / `mt` in its examples.
 > `Jn` and `Mt` are common display abbreviations, not OSIS identifiers; they are
-> corrected here. See [Open Issue 15](08-open-issues.md).
+> corrected here.
+>
+> **Compatibility note [REV-05].** Implementers who built against the 0.3.0 examples
+> should replace `jn` with `john` and `mt` with `matt`. The former paths were never
+> assigned: the resolution server answers them with `404` and a `suggestion` carrying the
+> corrected identifier, never with a `301` redirect, and they are not registered as
+> aliases ([§3.1](03-domains.md#31-scripture-cdcfverse-and-books-cdcfbook-rev-02)).
 
 ---
 

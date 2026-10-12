@@ -3,15 +3,12 @@
  * validate-identifiers.js
  *
  * Extracts every cdcf: identifier referenced in the example files and checks
- * it against a small set of structural rules derived from
- * spec/appendix-d-abnf.abnf (lower-case ASCII only, valid domain prefix,
- * hyphen-separated slugs, no trailing slash, <= 256 chars).
- *
- * This is NOT a full ABNF interpreter — it re-implements the per-domain
- * shape checks in JS for speed and zero dependencies. If the grammar file
- * changes, this script's DOMAIN_PATTERNS must be kept in sync (this is a
- * known limitation — see Open Issue 12 in spec/08-open-issues.md regarding
- * ABNF maintenance process).
+ * it against the normative grammar in spec/appendix-d-abnf.abnf, which is
+ * parsed and interpreted directly (scripts/lib/abnf.js) — there is no
+ * hand-maintained copy of the grammar to keep in sync (§6.6). Segments the
+ * grammar leaves to the registry (canon-law code, institution type,
+ * cdcf:rel/ value) are checked against the tables in spec/03-domains.md.
+ * See scripts/lib/cdcf-id.js for the exact rules.
  *
  * Error response bodies (objects with an "error" key) echo the identifier the
  * client *requested* in their "identifier" field, which may legitimately be
@@ -25,6 +22,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { createChecker } = require('./lib/cdcf-id');
 
 const [, , grammarPath, examplesDir] = process.argv;
 if (!grammarPath || !examplesDir) {
@@ -37,23 +35,15 @@ if (!fs.existsSync(grammarPath)) {
   process.exit(1);
 }
 
-// v0.5.0: `person` withdrawn (§3.6.1), `work` added (§3.6).
-const VALID_DOMAINS = ['verse', 'book', 'magisterium', 'ccc', 'canon', 'concept', 'work', 'institution', 'rel'];
+let check;
+try {
+  check = createChecker(grammarPath);
+} catch (e) {
+  console.error(`Cannot build identifier checker: ${e.message}`);
+  process.exit(1);
+}
 
-const DOMAIN_PATTERNS = {
-  verse:        /^verse\/[a-z0-9]+\/\d+(\/\d+(-\d+)?)?$/,
-  book:         /^book\/[a-z0-9]+$/,
-  magisterium:  /^magisterium\/[a-z0-9-]+\/[a-z0-9-]+(\/(chapter|canon|paragraph|article)\/\d+)?$/,
-  ccc:          /^ccc\/\d+(-\d+)?$/,
-  canon:        /^canon\/(cic1983|cic1917|cceo)\/\d+(\/(\d+|authentic-interpretation\/\d{4}-\d{2}-\d{2}))?$/,
-  // Opaque, case-sensitive "CN" prefix + 4–8 digits (Appendix D: %x43.4E 4*8DIGIT)
-  concept:      /^concept\/CN\d{4,8}$/,
-  work:         /^work\/[a-z0-9-]+(\/[a-z0-9-]+)*$/,
-  institution:  /^institution\/(diocese|conference|council|order|dicastery|seminary|eastern-church)\/[a-z0-9-]+$/,
-  rel:          /^rel\/(magisterial-proof-text|patristic-interpretation|liturgical-use|theological-argument|typological-sense|anagogical-sense|defines-concept|supersedes|interprets|contradicted-by)$/
-};
-
-function extractCdcfRefs(obj, acc = [], keyHint = null) {
+function extractCdcfRefs(obj, acc = []) {
   if (typeof obj === 'string') {
     if (obj.startsWith('cdcf:')) {
       const value = obj.slice('cdcf:'.length);
@@ -70,7 +60,7 @@ function extractCdcfRefs(obj, acc = [], keyHint = null) {
     const isErrorBody = Object.prototype.hasOwnProperty.call(obj, 'error');
     Object.entries(obj).forEach(([k, v]) => {
       if (isErrorBody && k === 'identifier') return;
-      extractCdcfRefs(v, acc, k);
+      extractCdcfRefs(v, acc);
     });
   }
   return acc;
@@ -93,30 +83,10 @@ for (const file of files) {
   const refs = extractCdcfRefs(data);
   for (const ref of refs) {
     totalChecked++;
-    if (ref.length > 256) {
-      console.error(`${file}: cdcf:${ref} — exceeds 256 character limit`);
+    const problem = check(ref);
+    if (problem) {
+      console.error(`${file}: cdcf:${ref} — ${problem}`);
       failed = true;
-      continue;
-    }
-    const domain = ref.split('/')[0];
-    // §2.3 rule 1: lower-case only, except the fixed upper-case prefix of an
-    // opaque identifier — which the concept pattern below enforces exactly.
-    const allowedChars = domain === 'concept' ? /^[a-zA-Z0-9\-/.]+$/ : /^[a-z0-9\-/.]+$/;
-    if (!allowedChars.test(ref)) {
-      console.error(`${file}: cdcf:${ref} — contains characters outside lower-case ASCII/digits/hyphen/slash`);
-      failed = true;
-      continue;
-    }
-    if (!VALID_DOMAINS.includes(domain)) {
-      console.error(`${file}: cdcf:${ref} — unknown domain "${domain}"`);
-      failed = true;
-      continue;
-    }
-    const pattern = DOMAIN_PATTERNS[domain];
-    if (!pattern.test(ref)) {
-      console.error(`${file}: cdcf:${ref} — does not match ${domain} domain grammar`);
-      failed = true;
-      continue;
     }
   }
   if (refs.length) console.log(`${file}: ${refs.length} identifier(s) checked`);

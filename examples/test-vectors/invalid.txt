@@ -1,0 +1,37 @@
+# Identifiers that MUST be rejected. One identifier per line, followed by the
+# reason after "#". Lines that start with "#" are comments.
+# Checked by scripts/check-test-vectors.js (spec/06-governance.md §6.6).
+
+# Path form not bound to its domain (fixed in [REV-05])
+cdcf:ccc/summa-theologiae                    # work path under the ccc domain
+cdcf:book/john/3/16                          # verse path under the book domain
+cdcf:concept/real-presence                   # slug where an opaque ID is required
+
+# Concept number spelling (fixed in [REV-05])
+cdcf:concept/CN00001                         # extra leading zero
+cdcf:concept/CN012345                        # extra leading zero
+cdcf:concept/CN001                           # fewer than four digits
+cdcf:concept/CN123456789                     # more than eight digits
+cdcf:concept/cn0001                          # prefix must be upper case
+
+# Unregistered vocabulary values (registry, not grammar, since [REV-05])
+cdcf:canon/cic2099/1                         # unregistered code
+cdcf:institution/parish/st-peter             # unregistered institution type
+cdcf:rel/not-a-relationship                  # unregistered relationship type
+
+# Case and character rules (§2.3)
+cdcf:Verse/john/3/16                         # domain must be lower case
+cdcf:verse/John/3/16                         # slug must be lower case
+cdcf:magisterium/trent/decretum-de-iustificatione/Canon/9  # keyword must be lower case
+cdcf:work/summa_theologiae                   # underscore not permitted
+cdcf:verse/john/3/16/                        # trailing slash
+
+# Withdrawn or unknown domains
+cdcf:person/thomas-aquinas                   # person domain withdrawn in 0.5.0
+cdcf:liturgy/missale-romanum                 # not a defined domain
+
+# Structural errors
+cdcf:verse/john                              # chapter required
+cdcf:canon/cic1983/230/authentic-interpretation/1994-11  # incomplete date
+cdcf:magisterium/vatican2                    # document slug required
+cdcf:magisterium/vatican2/dei-verbum/section/1  # unknown section type
