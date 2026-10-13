@@ -8,6 +8,72 @@ discussion that prompted this repo split.
 The format follows [Keep a Changelog](https://keepachangelog.com/); versioning follows
 [Semantic Versioning](https://semver.org/).
 
+## [Unreleased] — open-issue resolutions, Group A ([REV-05])
+
+Proposed as 0.5.1, but this release contains **restrictive grammar changes** (strings that
+were valid under 0.5.0 are now invalid). Under the new §6.6 rule it should therefore be
+released as **0.6.0**. No identifier invalidated by these changes had been assigned in a
+stable release.
+
+**Resolved open issues:** 5, 6, 10, 11, 12, 13, 14, 15 (see below). Remaining issues keep
+their numbers.
+
+**Grammar (Appendix D):**
+- `cdcf-id` now binds each path production to its own domain. Previously
+  `cdcf-id = domain SLASH domain-path` accepted any domain's path under any domain
+  (`cdcf:ccc/summa-theologiae`). The `domain` rule is removed, along with the
+  `domain-path =/` alternatives, which had no initial `=` definition as RFC 5234 §3.3
+  requires. *(restrictive)*
+- `concept-num = 4DIGIT / %x31-39 4*7DIGIT`: each number has a single spelling
+  (`CN0007`, `CN12345`). `CN00007` and `CN012345` are now invalid. *(restrictive)*
+- `work-path = work-slug *(SLASH path-segment)`. The former
+  `[SLASH 1*path-segment]` concatenated segments with no separator, so it never matched
+  `summa-theologiae/iii/q75/a1`. The old regex validator hid this. *(additive fix)*
+- `code`, `inst-type` and `rel-slug` are now `slug`. Their values live in the registry,
+  seeded from new tables §3.4.1 (codes) and §3.7.2 (institution types) and from the
+  existing §3.8.2. The values themselves are unchanged.
+- Validation notes 3 and 5–9 added or extended (case-sensitive matching of quoted
+  strings, padding, registered segments, test vectors).
+
+**Specification:**
+- **Issue 5** — New §3.2.4 Document Slugs: one slug per document, taken from the title or
+  incipit in the language of the typical edition and ASCII-folded. Non-Latin scripts are
+  romanized with ALA-LC. Translations go in language-tagged labels.
+- **Issue 6** — `draft-cdcf-patristics-00` chartered (§6.5.1). Issue 16 is carried into it.
+- **Issue 10** — Bulk resolution is deferred to `draft-cdcf-resolution-api-00`.
+  §4.6.1 fixes the constraints: per-item results equal to a single `GET` at the same
+  depth, per-item status and error body, input order preserved, and an advertised
+  maximum batch size.
+- **Issue 11** — §4.8.1: the feed also covers `cdcf:rel/` declarations and context
+  versions. Entries are retained permanently, with a live window of at least 90 days and
+  RFC 5005 archives. Registry history remains the §7 audit log.
+- **Issue 12** — §6.6 Grammar Revision Process: one PR per change, with test vectors;
+  additive changes are MINOR and restrictive ones MAJOR, never invalidating a stable ID.
+  Validators must interpret the grammar, and vocabularies are registered rather than
+  written into the grammar.
+- **Issue 13** — §3.5.1: allocation is central only, with no institutional ID ranges.
+  Contributors use placeholders and the ID is minted at merge (§6.1). The padding rule
+  is as above.
+- **Issue 14** — New §4.9 Alias Lookup (`GET /{domain}?{scheme}={value}` → `303`).
+  `notation` (§3.5.2) is its first registered scheme. It is MUST for the CDCF server and
+  its mirrors and OPTIONAL elsewhere, and aliases are never reassigned. A split concept
+  keeps `200` and lists its successors in `dcterms:isReplacedBy`; looking up its notation
+  returns `300`. §4.5 gains `300`, `303` and `400` rows.
+- **Issue 15** — Compatibility note in §3.1 and Appendix A: former `jn`/`mt` paths
+  return `404` with a `suggestion`. They are never answered with `301` and never become
+  aliases. New example `error-404-osis-correction.json`.
+- RFC 5005, DCMI Metadata Terms and the ALA-LC Romanization Tables added to §7 and §9.
+
+**Renamed identifiers** (draft only; never in a stable release), to follow §3.2.4:
+- `cdcf:magisterium/trent/decree-justification` → `cdcf:magisterium/trent/decretum-de-iustificatione`
+- `cdcf:magisterium/trent/decree-eucharist` → `cdcf:magisterium/trent/decretum-de-sanctissimo-eucharistiae-sacramento`
+
+**Repo changes:** `scripts/lib/abnf.js` is a dependency-free RFC 5234 parser and
+matcher. `validate-grammar.js` now parses the grammar properly and rejects `=/` without
+`=`. `validate-identifiers.js` checks identifiers against the grammar itself plus the
+registry tables, instead of hand-synced regexes. New `check-test-vectors.js` and
+`examples/test-vectors/{valid,invalid}.txt`, with a matching CI step.
+
 ## [0.5.0] — 2026-10 — Person-domain review (draft-04)
 
 **Critical fixes:**

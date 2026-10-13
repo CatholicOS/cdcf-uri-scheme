@@ -28,6 +28,9 @@ jobs:
       - name: Validate example identifiers against grammar
         run: node scripts/validate-identifiers.js spec/appendix-d-abnf.abnf examples/
 
+      - name: Check grammar test vectors (valid accepted, invalid rejected)
+        run: node scripts/check-test-vectors.js spec/appendix-d-abnf.abnf examples/test-vectors/
+
       - name: Check for duplicate vocabulary keys in domain tables
         run: |
           node scripts/check-duplicate-vocab.js spec/03-domains.md

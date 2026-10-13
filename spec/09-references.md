@@ -8,6 +8,8 @@
   et al. (2005)
 - [RFC 4287](https://www.rfc-editor.org/rfc/rfc4287): Atom Syndication Format.
   Nottingham, M. & Sayre, R. (2005)
+- [RFC 5005](https://www.rfc-editor.org/rfc/rfc5005): Feed Paging and Archiving.
+  Nottingham, M. (2007)
 - [RFC 5234](https://www.rfc-editor.org/rfc/rfc5234): ABNF for Syntax Specifications.
   Crocker, D. & Overell, P. (2008)
 - [RFC 7231](https://www.rfc-editor.org/rfc/rfc7231): HTTP/1.1 Semantics. Fielding, R. &
@@ -18,6 +20,10 @@
 - *Code of Canon Law* (CIC 1983). Libreria Editrice Vaticana.
 - *Code of Canons of the Eastern Churches* (CCEO 1990). Libreria Editrice Vaticana.
 - ISO/IEC 21838-2:2021. Basic Formal Ontology (BFO).
+- [DCMI Metadata Terms](https://www.dublincore.org/specifications/dublin-core/dcmi-terms/).
+  Dublin Core Metadata Initiative.
+- [ALA-LC Romanization Tables](https://www.loc.gov/catdir/cpso/roman.html). Library of
+  Congress / American Library Association.
 - *Ad Tuendam Fidem*, John Paul II. *AAS* 90 (1998), pp. 457–461.
 - *Commentary on the Professio fidei*, CDF/Card. Ratzinger. *AAS* 90 (1998), pp. 544–551.
 - *Donum Veritatis*, CDF (1990). *AAS* 82, pp. 1550–1570.

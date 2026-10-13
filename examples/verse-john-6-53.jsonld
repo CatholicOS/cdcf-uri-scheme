@@ -24,7 +24,7 @@
       "@type": "cdcf:rel/magisterial-proof-text",
       "target": "cdcf:concept/CN0007",
       "targetNotation": "real-presence",
-      "citedIn": "cdcf:magisterium/trent/decree-eucharist/canon/1"
+      "citedIn": "cdcf:magisterium/trent/decretum-de-sanctissimo-eucharistiae-sacramento/canon/1"
     },
     {
       "@type": "cdcf:rel/patristic-interpretation",

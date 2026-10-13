@@ -1,0 +1,46 @@
+# Identifiers that MUST conform to spec/appendix-d-abnf.abnf and the registry
+# tables in spec/03-domains.md. One identifier per line; "#" starts a comment.
+# Checked by scripts/check-test-vectors.js (spec/06-governance.md §6.6).
+
+# Scripture
+cdcf:book/john
+cdcf:book/1macc
+cdcf:verse/john/3/16
+cdcf:verse/rom/8/28-30
+cdcf:verse/ps/22
+
+# Magisterium
+cdcf:magisterium/vatican2/dei-verbum
+cdcf:magisterium/pope-leo-xiii/rerum-novarum
+cdcf:magisterium/pope-francis/laudato-si
+cdcf:magisterium/trent/decretum-de-iustificatione/canon/9
+
+# Catechism
+cdcf:ccc/1324
+cdcf:ccc/1730-1748
+
+# Canon law
+cdcf:canon/cic1983/1024
+cdcf:canon/cic1983/844/1
+cdcf:canon/cic1983/230/authentic-interpretation/1994-11-11
+cdcf:canon/cceo/7
+
+# Concepts — four digits zero-padded; five or more with no leading zero
+cdcf:concept/CN0001
+cdcf:concept/CN0007
+cdcf:concept/CN9999
+cdcf:concept/CN10000
+cdcf:concept/CN12345678
+
+# Works
+cdcf:work/summa-theologiae
+cdcf:work/summa-theologiae/iii/q75/a1
+cdcf:work/cyril-of-alexandria-commentary-on-john
+
+# Institutions
+cdcf:institution/eastern-church/maronite
+cdcf:institution/dicastery/ddf
+
+# Relationship types
+cdcf:rel/magisterial-proof-text
+cdcf:rel/contradicted-by

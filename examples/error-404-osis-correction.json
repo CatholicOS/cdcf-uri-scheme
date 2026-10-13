@@ -1,0 +1,6 @@
+{
+  "error": "not-found",
+  "identifier": "cdcf:verse/jn/6/53",
+  "message": "\"jn\" is not an OSIS 2.1.1 book ID. Version 0.3.0 used it in examples before the book codes were corrected in version 0.4.0 (§3.1); the Gospel of John is \"john\".",
+  "suggestion": "cdcf:verse/john/6/53"
+}

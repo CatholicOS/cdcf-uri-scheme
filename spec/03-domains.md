@@ -2,7 +2,7 @@
 
 The `cdcf:` namespace is divided into nine domains. Domains revised or added in version
 0.3.0 are marked **[REV-02]**; in version 0.4.0, **[REV-03]**; in version 0.5.0,
-**[REV-04]**. The formal grammar for every domain is in
+**[REV-04]**; in the next release, **[REV-05]**. The formal grammar for every domain is in
 [Appendix D](appendix-d-abnf.abnf); this section gives the human-readable description and
 worked examples.
 
@@ -30,6 +30,17 @@ entity of all verse identifiers within that book.
 The `{osis-book}` segment MUST be the exact, lower-cased OSIS 2.1.1 book ID (`john`,
 `matt` — not `jn`, `mt`) **[REV-03]**. See [Appendix A](appendix-a-osis.md) and the
 validation notes in [Appendix D](appendix-d-abnf.abnf).
+
+**Former 0.3.0 book codes [REV-05].** The `jn` and `mt` paths that version 0.3.0 used in
+its examples were never assigned. A request for one (e.g. `cdcf:verse/jn/6/53`) MUST
+return `HTTP 404` with the `suggestion` field
+([§4.5](04-resolution.md#45-http-status-codes-and-error-response-schema-rev-02)) set to the
+corrected identifier (`cdcf:verse/john/6/53`). It MUST NOT return `301`, which would imply
+the former path had been a published identifier
+([§2.4](02-syntax.md#24-stability-guarantee)), and the former codes MUST NOT be
+registered as aliases ([§4.9](04-resolution.md#49-alias-lookup-new--rev-05)), which would
+reintroduce the second naming scheme the correction removed. See
+[`examples/error-404-osis-correction.json`](../examples/error-404-osis-correction.json).
 
 ### 3.1.1 Book identifiers (`cdcf:book/`) [REV-02]
 
@@ -87,7 +98,7 @@ is revised in [§3.2.3](#323-papal-issuer-slugs-new--rev-04).
 |---|---|---|
 | `cdcf:magisterium/` | `pope-{name}[-{roman}]` | `cdcf:magisterium/pope-leo-xiii/rerum-novarum` |
 | `cdcf:magisterium/` | `pope-{name}[-{roman}]` | `cdcf:magisterium/pope-pius-ix/ineffabilis-deus` |
-| `cdcf:magisterium/` | `{council-slug}` | `cdcf:magisterium/trent/decree-justification` |
+| `cdcf:magisterium/` | `{council-slug}` | `cdcf:magisterium/trent/decretum-de-iustificatione` |
 | `cdcf:magisterium/` | `{dicastery-slug}` | `cdcf:magisterium/ddf/fiducia-supplicans` |
 
 ### 3.2.1 Document Type Field [REV-02]
@@ -125,8 +136,8 @@ The resolution response MUST include a `papalApproval` field:
 
 | URI | Refers to |
 |---|---|
-| `cdcf:magisterium/trent/decree-justification` | Council of Trent, Decree on Justification (1547) |
-| `cdcf:magisterium/trent/decree-justification/canon/9` | Trent, Decree on Justification, Canon 9 |
+| `cdcf:magisterium/trent/decretum-de-iustificatione` | Council of Trent, Session VI, *Decretum de iustificatione* (1547) |
+| `cdcf:magisterium/trent/decretum-de-iustificatione/canon/9` | Trent, *Decretum de iustificatione*, Canon 9 |
 | `cdcf:magisterium/vatican2/dei-verbum` | Vatican II, *Dei Verbum* (1965) |
 | `cdcf:magisterium/pope-leo-xiii/rerum-novarum` | Leo XIII, *Rerum Novarum* (1891) |
 | `cdcf:magisterium/pope-pius-ix/ineffabilis-deus` | Pius IX, *Ineffabilis Deus* (1854) — Immaculate Conception |
@@ -152,6 +163,34 @@ is identified by his ontology IRI ([§3.6.1](#361-persons-as-ontology-individual
 cdcf:magisterium/pope-leo-xiii/rerum-novarum
 cdcf:magisterium/pope-francis/laudato-si
 ```
+
+### 3.2.4 Document Slugs [NEW — REV-05]
+
+Each magisterial document has exactly one `document-slug`. It is the document's official
+title or, where the document is known by it, its incipit, **in the language of the
+typical edition** (normally the text published in the *Acta Apostolicae Sedis*, or for
+conciliar acts the official acts of the council), folded to the `slug` production of
+[Appendix D](appendix-d-abnf.abnf):
+
+1. lower-case every letter and remove diacritics (`ë` → `e`);
+2. remove apostrophes and other punctuation;
+3. replace each run of spaces with a single hyphen.
+
+Titles in a non-Latin script are first romanized using the ALA-LC Romanization Tables,
+then folded as above.
+
+| Title in the typical edition | `document-slug` |
+|---|---|
+| *Dei Verbum* | `dei-verbum` |
+| *Laudato si'* | `laudato-si` |
+| *Decretum de iustificatione* (Trent, Session VI) | `decretum-de-iustificatione` |
+
+Translated titles (`on-divine-revelation`) are never identifiers. They are carried as
+language-tagged labels in the resolution response (`title`, `rdfs:label`,
+`skos:altLabel`). Because the document slug is scoped by its issuer slug, documents of
+different issuers that share an incipit do not collide; should one issuer reuse a title,
+the case is decided under the assignment process of
+[§6.1](06-governance.md#61-identifier-assignment).
 
 ---
 
@@ -194,6 +233,19 @@ The ABNF grammar in [Appendix D](appendix-d-abnf.abnf) makes the three path form
 unambiguous: a canon paragraph is always numeric; `authentic-interpretation` is a fixed
 keyword; dates follow ISO 8601. No heuristic parsing is required.
 
+### 3.4.1 Registered Codes [NEW — REV-05]
+
+The `{code}` segment MUST be a registered code of canon law. The grammar types it as a
+`slug`; its values are kept in the registry rather than in the grammar
+([§6.6](06-governance.md#66-grammar-revision-process-new--rev-05)). The registered codes
+are:
+
+| Code | Refers to |
+|---|---|
+| `cic1983` | *Codex Iuris Canonici* (1983) |
+| `cic1917` | *Codex Iuris Canonici* (1917), historical |
+| `cceo` | *Codex Canonum Ecclesiarum Orientalium* (1990) |
+
 ---
 
 ## 3.5 Theological Concepts (`cdcf:concept/`) [REV-03]
@@ -235,29 +287,53 @@ as `skos:exactMatch`, not `owl:sameAs` (§2.6).
 `cdcf:concept/` identifiers are allocated sequentially by the CDCF registrar from the
 `CN`-prefixed range (`CN0001`, `CN0002`, …) following the assignment process in
 [§6.1](06-governance.md#61-identifier-assignment). An allocated ID is never reused,
-including when a concept is later split or merged; a superseded concept follows the
-deprecation contract in [§2.4](02-syntax.md#24-stability-guarantee) (`301` to a
-successor, both identifiers resolvable indefinitely). The `skos:notation` mnemonic MAY be
+including when a concept is later split or merged. The `skos:notation` mnemonic MAY be
 revised across a MINOR version release to track a boundary revision without changing the
 ontology IRI; the prior notation MUST remain resolvable as an alternate `skos:altLabel`.
 
+**Central allocation [REV-05].** The registrar alone allocates `CN` numbers; no ranges are
+reserved for contributing institutions. A reserved range would leak the contributor's
+identity into an identifier that is meant to carry no semantics
+([§2.6](02-syntax.md#26-two-layer-identifiers-ontology-iri-and-canonical-notation-rev-03)),
+and the registry's volume does not call for distributed allocation. A contributor
+proposing a concept uses a temporary placeholder in the pull request — one that does not
+conform to [Appendix D](appendix-d-abnf.abnf), so it cannot be mistaken for an allocated
+ID. The registrar mints the next number when the proposal is merged and replaces the
+placeholder.
+
+**Number format [REV-05].** The number has at least four digits. Numbers below 10000 are
+zero-padded to exactly four digits (`CN0007`); larger numbers carry no leading zero
+(`CN12345`). Each number therefore has exactly one spelling: `CN00007` and `CN012345`
+are invalid.
+
+**Superseded concepts [REV-05].** A concept replaced by exactly one successor (including
+a merge) follows the deprecation contract in [§2.4](02-syntax.md#24-stability-guarantee):
+`301` to the successor, with both identifiers resolvable indefinitely. A concept that is
+**split** has no single successor. Its IRI keeps returning `200`, and the response lists
+every successor in `dcterms:isReplacedBy`. An alias lookup of its notation returns
+`300 Multiple Choices` ([§4.9](04-resolution.md#49-alias-lookup-new--rev-05)).
+
 ### 3.5.2 Convenience Resolution by Notation [NEW — REV-03]
 
-Because the opaque ontology IRI is not intended to be guessed or hand-typed, the
-resolution server MUST also support lookup by notation as a convenience for humans and
-authoring tools:
+Because the opaque ontology IRI is not intended to be guessed or hand-typed, concepts can
+be looked up by notation as a convenience for humans and authoring tools. **[REV-05]**
+Notation lookup is the `notation` scheme of the general alias lookup in
+[§4.9](04-resolution.md#49-alias-lookup-new--rev-05), which defines the request,
+responses, and normative status:
 
 ```
 GET https://id.catholiccommons.org/concept?notation={mnemonic}
+→ 303 See Other
+  Location: https://id.catholiccommons.org/concept/{opaque-id}
 ```
 
-A matching request MUST respond with `HTTP 303 See Other` and a `Location` header
-pointing to the canonical `cdcf:concept/{opaque-id}` IRI. This mirrors the
-friendly-alias / resolver pattern used by community identifier services such as
-w3id.org, applied here at the level of a single query parameter rather than a separate
-hostname. Applications MUST treat the notation-lookup endpoint as a convenience only: the
-opaque IRI returned by the `303`, not the notation string, is what MUST be stored as the
-identifying reference in any persisted graph or cross-reference.
+Every current notation, and every prior notation kept as `skos:altLabel`
+([§3.5.1](#351-opaque-id-allocation-new--rev-03)), is a registered `notation` value for
+its concept. A notation once used is never reassigned to a different concept. This
+mirrors the friendly-alias / resolver pattern used by community identifier services such
+as w3id.org, applied at the level of a single query parameter rather than a separate
+hostname. The opaque IRI returned by the `303`, not the notation string, is what MUST be
+stored as the identifying reference in any persisted graph or cross-reference.
 
 ---
 
@@ -275,19 +351,26 @@ cdcf:work/{work-slug}
 cdcf:work/{work-slug}/{path-segment}+   ; one or more sub-divisions
 ```
 
-The `{path-segment}+` production is carried over unchanged from version 0.3.0 and allows
-arbitrary depth for works with three or more levels of internal structure (e.g.,
-*Summa Theologiae*: part / question / article; *Scriptum super Sententiis*: book /
-distinction / question / article).
+The `{path-segment}+` form is carried over from version 0.3.0 and allows arbitrary depth
+for works with three or more levels of internal structure (e.g., *Summa Theologiae*:
+part / question / article; *Scriptum super Sententiis*: book / distinction / question /
+article). **[REV-05]** Its ABNF production omitted the slash between segments and is
+corrected in [Appendix D](appendix-d-abnf.abnf); the identifiers shown here are
+unchanged.
 
 A `work-slug` MUST be unique across the registry. Where a conventional title is shared
 by more than one work (e.g., the commentaries on John by Cyril of Alexandria, Augustine
 and Thomas Aquinas), the slug MUST be prefixed with the author's conventional citation
 name (`cyril-of-alexandria-commentary-on-john`). That prefix is part of the work's
-citation title; it is **not** a person identifier and MUST NOT be parsed as one. Whether
-established clavis numbers (CPG, CPL) should be used instead for patristic works is
-[Open Issue 16](08-open-issues.md). See [Appendix D](appendix-d-abnf.abnf) for the ABNF
-production.
+citation title; it is **not** a person identifier and MUST NOT be parsed as one. See
+[Appendix D](appendix-d-abnf.abnf) for the ABNF production.
+
+**Patristic works [REV-05].** Conventions specific to the Church Fathers corpus — clavis
+mapping, PG/PL locators, division conventions, and disputed or traditional attribution in
+`authoredBy` — are deferred to the sub-specification `draft-cdcf-patristics-00`
+([§6.5.1](06-governance.md#651-chartered-sub-specifications-new--rev-05)). Whether
+established clavis numbers (CPG, CPL) should key patristic works is
+[Open Issue 16](08-open-issues.md), which that sub-specification takes up.
 
 | URI | Refers to |
 |---|---|
@@ -362,6 +445,23 @@ cdcf:institution/eastern-church/{slug}
 | `cdcf:institution/dicastery/ddf` | Dicastery for the Doctrine of the Faith |
 | `cdcf:institution/conference/usccb` | United States Conference of Catholic Bishops |
 
+### 3.7.2 Institution Types [NEW — REV-05]
+
+The `{type}` segment MUST be a registered institution type. The grammar types it as a
+`slug`; its values are kept in the registry rather than in the grammar
+([§6.6](06-governance.md#66-grammar-revision-process-new--rev-05)). The registered types
+are:
+
+| Institution type | Refers to |
+|---|---|
+| `diocese` | Dioceses |
+| `conference` | Episcopal conferences |
+| `council` | Councils (e.g. `trent`) |
+| `order` | Religious orders |
+| `dicastery` | Dicasteries of the Roman Curia |
+| `seminary` | Seminaries |
+| `eastern-church` | Eastern Catholic *sui iuris* churches ([§3.7.1](#371-eastern-catholic-churches)) |
+
 ---
 
 ## 3.8 Relationship Types (`cdcf:rel/`) [REV-02]
@@ -381,6 +481,12 @@ for a worked example (`GET https://id.catholiccommons.org/rel/magisterial-proof-
 with `Accept: application/ld+json`).
 
 ### 3.8.2 Relationship Type Vocabulary
+
+**[REV-05]** The grammar types a `cdcf:rel/` value as a `slug`; the values below are the
+registry's content rather than part of the grammar
+([§6.6](06-governance.md#66-grammar-revision-process-new--rev-05)). Adding or changing a
+value remains subject to the review in
+[§6.3](06-governance.md#63-theological-and-canonical-review).
 
 | `cdcf:rel/` value | OWL Domain | OWL Range | Description |
 |---|---|---|---|

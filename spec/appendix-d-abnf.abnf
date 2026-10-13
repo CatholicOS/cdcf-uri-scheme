@@ -1,12 +1,13 @@
 ; ============================================================================
 ; Appendix D: Formal ABNF Grammar for the cdcf: URI Scheme
-; draft-cdcf-catholic-uri-scheme-04 · version 0.5.0
+; draft-cdcf-catholic-uri-scheme-04 · version 0.5.0, with unreleased [REV-05]
+; changes
 ;
 ; This grammar is NORMATIVE. Any cdcf: identifier that does not conform to
 ; these productions is invalid. Implementations MUST reject non-conforming
 ; identifiers. Future domains introduced by sub-specifications MUST extend
-; this grammar via a patch release of the main specification (see
-; spec/06-governance.md §6.5).
+; this grammar via a release of the main specification, following the
+; grammar revision process in spec/06-governance.md §6.6. [REV-05]
 ;
 ; Notation per RFC 5234 (https://www.rfc-editor.org/rfc/rfc5234).
 ;
@@ -17,6 +18,14 @@
 ;   [REV-04] "work" domain and work-path added (§3.6)
 ;   [REV-04] concept-path prefix written as a case-sensitive hex literal
 ;   [REV-04] papal issuer-slug ordinal only where part of the official name
+;   [REV-05] cdcf-id binds each path production to its own domain; the
+;            "domain" rule and the incremental "domain-path =/" alternatives
+;            (which had no initial "=" definition) are removed
+;   [REV-05] concept-num: at least four digits, no extra leading zeros
+;   [REV-05] work-path separates sub-division segments with SLASH (the
+;            0.3.0–0.5.0 form "[SLASH 1*path-segment]" omitted the separator)
+;   [REV-05] controlled vocabularies (code, inst-type, rel-slug) are "slug";
+;            their values are registered, not part of the grammar (§6.6)
 ; ============================================================================
 
 ; ── Core character classes ───────────────────────────────────────────────────
@@ -30,13 +39,20 @@ roman    = 1*(%x69 / %x76 / %x78 / %x6C / %x63 / %x64 / %x6D)
 iso-date = 4DIGIT HYPHEN 2DIGIT HYPHEN 2DIGIT  ; YYYY-MM-DD
 
 ; ── Top-level production ─────────────────────────────────────────────────────
-; A cdcf: identifier is a domain followed by a slash and a domain path
-cdcf-id  = domain SLASH domain-path
-domain   = "verse" / "book" / "magisterium" / "ccc" / "canon"
-         / "concept" / "work" / "institution" / "rel"
+; A cdcf: identifier is a domain name followed by a slash and the path form
+; of THAT domain. [REV-05] Binding each path to its domain makes
+; e.g. "ccc/summa-theologiae" invalid; a new domain adds one alternative here.
+cdcf-id  = "verse"       SLASH verse-path
+         / "book"        SLASH book-path
+         / "magisterium" SLASH magisterium-path
+         / "ccc"         SLASH ccc-path
+         / "canon"       SLASH canon-path
+         / "concept"     SLASH concept-path
+         / "work"        SLASH work-path
+         / "institution" SLASH institution-path
+         / "rel"         SLASH rel-path
 
 ; ── Scripture ─────────────────────────────────────────────────────────────────
-domain-path =/ verse-path / book-path
 book-path    = osis-book
 verse-path   = osis-book SLASH chapter [SLASH verse-ref]
 osis-book    = slug                          ; the exact lower-cased OSIS 2.1.1 book ID
@@ -45,58 +61,56 @@ chapter      = 1*DIGIT
 verse-ref    = 1*DIGIT [HYPHEN 1*DIGIT]      ; single verse or range
 
 ; ── Magisterium ───────────────────────────────────────────────────────────────
-domain-path =/ magisterium-path
 magisterium-path = issuer-slug SLASH doc-slug [SLASH section-type SLASH section-id]
 issuer-slug      = slug                      ; council, dicastery, or pope-{name}[-{roman}]
                                              ; (§3.2.3)
-doc-slug         = slug
+doc-slug         = slug                      ; ASCII-folded official title or incipit
+                                             ; (§3.2.4)
 section-type     = "chapter" / "canon" / "paragraph" / "article"
 section-id       = 1*DIGIT
 
 ; ── Catechism ─────────────────────────────────────────────────────────────────
-domain-path =/ ccc-path
 ccc-path    = para-num [HYPHEN para-num]
 para-num    = 1*DIGIT
 
 ; ── Canon Law ─────────────────────────────────────────────────────────────────
-domain-path =/ canon-path
 canon-path  = code SLASH canon-num [SLASH canon-qualifier]
-code        = "cic1983" / "cic1917" / "cceo"
+code        = slug                          ; a registered code of canon law
+                                             ; (§3.4.1); [REV-05] formerly an
+                                             ; enumeration in this grammar
 canon-num   = 1*DIGIT
 canon-qualifier = para-num                  ; paragraph number — always numeric
               / "authentic-interpretation" SLASH iso-date
                                              ; fixed keyword + ISO date — unambiguous
 
 ; ── Theological Concepts ──────────────────────────────────────────────────────
-domain-path  =/ concept-path
-concept-path = %x43.4E 4*8DIGIT              ; "CN", case-sensitive; opaque,
+concept-path = %x43.4E concept-num           ; "CN", case-sensitive; opaque,
                                              ; semantics-free (see §2.6)
+concept-num  = 4DIGIT / %x31-39 4*7DIGIT     ; [REV-05] 0001–9999 zero-padded to
+                                             ; four digits; 10000 upward with no
+                                             ; leading zero (§3.5.1)
 ; concept-notation = slug                    ; skos:notation mnemonic; NOT a URI
 ;                                            ; path segment
 
 ; ── Works ─────────────────────────────────────────────────────────────────────
-domain-path   =/ work-path
-work-path     = work-slug [SLASH 1*path-segment]
+work-path     = work-slug *(SLASH path-segment) ; [REV-05] slash-separated
 work-slug     = slug                        ; registry-unique; author-qualified
                                              ; where a title is shared
-path-segment  = slug                        ; one or more sub-division segments
-; NOTE: 1*path-segment allows arbitrary depth for works with 3+ structural levels
+path-segment  = slug                        ; one sub-division segment
+; NOTE: *(SLASH path-segment) allows arbitrary depth for works with 3+ structural levels
 ; e.g., summa-theologiae/iii/q75/a1 = work / part / question / article
 
 ; ── Institutions ──────────────────────────────────────────────────────────────
-domain-path       =/ institution-path
 institution-path  = inst-type SLASH slug
-inst-type         = "diocese" / "conference" / "council" / "order"
-                  / "dicastery" / "seminary" / "eastern-church"
+inst-type         = slug                    ; a registered institution type
+                                             ; (§3.7.2); [REV-05] formerly an
+                                             ; enumeration in this grammar
 
 ; ── Relationship Types ────────────────────────────────────────────────────────
-domain-path =/ rel-path
 rel-path    = rel-slug
-rel-slug    = "magisterial-proof-text" / "patristic-interpretation"
-           / "liturgical-use" / "theological-argument"
-           / "typological-sense" / "anagogical-sense"
-           / "defines-concept" / "supersedes" / "interprets"
-           / "contradicted-by"
+rel-slug    = slug                          ; a registered relationship type
+                                             ; (§3.8.2); [REV-05] formerly an
+                                             ; enumeration in this grammar
 
 ; ============================================================================
 ; Validation notes (non-normative; see spec/03-domains.md for full discussion)
@@ -107,16 +121,22 @@ rel-slug    = "magisterial-proof-text" / "patristic-interpretation"
 ;    begins with the fixed keyword "authentic-interpretation". No heuristic
 ;    parsing is required.
 ;
-; 2. The work-path 1*path-segment production allows Thomas Aquinas's Summa
+; 2. The work-path *(SLASH path-segment) production allows Thomas Aquinas's Summa
 ;    (three sub-levels: part/question/article) and other scholastic works of
 ;    arbitrary structural depth. It carries over the variable-depth production
 ;    of version 0.3.0's person-path, which version 0.5.0 withdraws (§3.6.1).
+;    [REV-05] That production was written "[SLASH 1*path-segment]", which
+;    concatenates segments without separators and so never matched
+;    "summa-theologiae/iii/q75/a1"; the slash now precedes every segment.
 ;
 ; 3. All slug productions are restricted to lower-case ASCII (ALPHA = %x61-7A).
 ;    Upper-case characters are syntactically invalid in cdcf: identifiers,
 ;    except the fixed prefix of an opaque identifier. That prefix is written
 ;    as a hex literal (%x43.4E for "CN") because an ABNF quoted string is
 ;    case-insensitive under RFC 5234; it MUST appear in upper case. [REV-04]
+;    The quoted domain names and keywords of this grammar match any case
+;    under RFC 5234, but §2.3 rule 1 requires them in lower case; validators
+;    therefore match quoted strings case-sensitively. [REV-05]
 ;
 ; 4. The iso-date production in canon-qualifier enforces ISO 8601 date format
 ;    for authentic interpretations, ensuring consistent machine parsing
@@ -127,11 +147,26 @@ rel-slug    = "magisterial-proof-text" / "patristic-interpretation"
 ;    segment of the osisRef field byte-for-byte after case-folding.
 ;    Implementations MUST NOT introduce a second, undocumented abbreviation
 ;    scheme for the same book; version 0.3.0 shipped this defect (jn, mt) and
-;    it was corrected in version 0.4.0. [REV-03]
+;    it was corrected in version 0.4.0. [REV-03] The former paths are not
+;    aliases and are never redirected (§3.1). [REV-05]
 ;
 ; 6. The concept-path production is deliberately opaque (§2.6, §3.5): it
 ;    carries no linguistic content and MUST NOT be derived from, or assumed to
 ;    match, the concept's skos:notation. A client that has only a notation
-;    string MUST resolve it via the lookup in §3.5.2 before using the
-;    identifier in a stored cross-reference. [REV-03]
+;    string MUST resolve it via alias lookup (§4.9) before using the
+;    identifier in a stored cross-reference. [REV-03] [REV-05]
+;
+; 7. concept-num admits exactly one spelling of each number: CN0007 is valid
+;    and CN00007 is not; CN12345 is valid and CN012345 is not. Without this,
+;    two strings could denote the same allocated number. [REV-05]
+;
+; 8. A segment that the grammar types as "slug" but whose values are
+;    registered (code, inst-type, rel-slug) is valid only if the value is in
+;    the registry; the tables in spec/03-domains.md are the registry's
+;    initial content. Registering a value is a registry change, not a
+;    grammar change (§6.6). [REV-05]
+;
+; 9. Test vectors for this grammar are in examples/test-vectors/ (valid.txt,
+;    invalid.txt); CI asserts every valid vector conforms and every invalid
+;    vector is rejected. [REV-05]
 ; ============================================================================
