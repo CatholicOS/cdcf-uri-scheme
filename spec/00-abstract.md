@@ -18,7 +18,7 @@ Foundation invites responses from developers, theologians, canonists, and Cathol
 institutions. The comment period closes 60 days from the date of publication.
 
 > **Reviewer note — version 0.5.0:** This version withdraws the `cdcf:person/` domain
-> following Board review: persons are not an enumerable or finite set and are better
+> following TAG review: persons are not an enumerable or finite set and are better
 > modelled as individuals in the CDCF ontology ([§3.6.1](03-domains.md#361-persons-as-ontology-individuals-new--rev-04)).
 > Works cited by persons move to a new `cdcf:work/` domain ([§3.6](03-domains.md#36-works-cdcfwork-rev-04)).
 > The release also corrects the papal ordinal rule, the response-depth header, the

@@ -79,6 +79,14 @@ sign-off (§6.3, `CODEOWNERS`). Draft them if asked, but flag them clearly as
 - concept definitions, `authorityLevel` values, `skos:notation` changes
 - canonical status of Scripture books per tradition; Psalm numbering choice
 - how persons, popes, and Doctors of the Church are modelled
+- identifiers for patristic works: clavis-number keys, title language of work slugs
+  (Open Issue 16, `draft-cdcf-patristics-00`)
+- roadmap deferrals: whether liturgy and particular law become 1.0.0 domains or
+  sub-specifications (Open Issues 4 and 9)
+
+Every remaining Open Issue carries the `needs TAG review` label on GitHub; issues that
+also need committee discussion before drafting carry `committee`. There is no Board
+sign-off step.
 
 Do not invent `authorityLevel` values or theological claims in examples.
 

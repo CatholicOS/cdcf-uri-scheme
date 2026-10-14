@@ -44,8 +44,8 @@ Adopt this first: it reduces each related committee question to "which name is c
 | # | Proposal | Sign-off needed |
 |---|---|---|
 | 3 | Corrections never change the identifier (§2.3 rule 6). Response carries `textHistory`: dated text states with source (AAS ref / rescript); current authoritative text is default. Test case: `cdcf:ccc/2267` (2018 revision). A new act that changes an earlier one gets its own ID + new `cdcf:rel/amends` (MagisterialDoc → MagisterialDoc \| CCC). "As of" access is an API parameter (`?asOf=`), not an identifier. | TAG approval of the new `amends` rel (vocab change). |
-| 4 | Liturgy not a 1.0.0 domain; sub-spec `draft-cdcf-liturgy-00` (also home of calendar canonicalization). 1.0.0 only: reserve domain name `liturgy`; interim `citedIn` for `cdcf:rel/liturgical-use` = a `cdcf:work/` edition (e.g. `cdcf:work/missale-romanum-2002`). Sub-spec should align with existing Liturgical Calendar API event keys and Martyrology (`mr:`) IDs. | Board confirms the roadmap deferral. |
-| 9 | Standalone `draft-cdcf-particular-law-00`. 1.0.0 only reserves `particular-law`; opening the closed `code` enum is handled in Issue 12. Likely shape `cdcf:particular-law/{legislator}/{instrument}/…`, legislator = institution identifier. | Board confirms deferral. |
+| 4 | Liturgy not a 1.0.0 domain; sub-spec `draft-cdcf-liturgy-00` (also home of calendar canonicalization). 1.0.0 only: reserve domain name `liturgy`; interim `citedIn` for `cdcf:rel/liturgical-use` = a `cdcf:work/` edition (e.g. `cdcf:work/missale-romanum-2002`). Sub-spec should align with existing Liturgical Calendar API event keys and Martyrology (`mr:`) IDs. | TAG confirms the roadmap deferral. |
+| 9 | Standalone `draft-cdcf-particular-law-00`. 1.0.0 only reserves `particular-law`; opening the closed `code` enum is handled in Issue 12. Likely shape `cdcf:particular-law/{legislator}/{instrument}/…`, legislator = institution identifier. | TAG confirms the deferral. |
 
 ### C. Committee — genuine judgment calls
 
@@ -57,7 +57,7 @@ Adopt this first: it reduces each related committee question to "which name is c
 | 1 | Psalm numbering | Keep Vulgate canonical; Hebrew via `v11n` alias. Replace `psalmNumberingMap` with verse-level `versificationMap` (superscriptions shift verse numbers; Pss 9–10, 114–116, 147 split/merge). Source mappings from an established dataset (e.g. CrossWire SWORD versification tables). Counter-argument: modern Catholic vernacular Bibles (NABRE, RSV-CE) use Hebrew numbering. | Theologian/liturgist; existing BibleGet practice. |
 | 2 | Deuterocanon / Eastern canons | Catholic book structure normative (`cdcf:verse/dan/13/1`); OSIS separate-book IDs (`sus`, `bel`, `prazar`, `addesth`, `epjer`) invalid as `cdcf:book/`, resolve via alias; `osis-book` becomes a registered list. Books read in some Eastern traditions (3 Maccabees, Psalm 151, Prayer of Manasseh) get IDs with per-tradition `canonicalStatus`. | Eastern Catholic theologian for the per-tradition statuses. |
 | 8 | Eastern concepts | Separate CN concepts (not an `easternEquivalents` field, which privileges the Latin concept and asserts contested equivalence). Link with within-scheme SKOS (`skos:related`, `skos:broader`); `skos:exactMatch` stays reserved for external vocabularies (§2.6). | Eastern and Latin theologians. |
-| 16 | Clavis numbers; title language | Keep slugs as identifiers; clavis numbers (`cpg`, `cpl`) are required properties where they exist and alias keys (precedent: BKV keys works by clavis, e.g. CPL 251 = *Confessiones*). Clavis doesn't cover post-patristic works and is externally revised, so it can't be the identifier. **Resolve title-language inconsistency:** examples mix `confessions` (English) and `summa-theologiae` (Latin); proposal = standard Latin title from the clavis/standard reference (rename `confessions` → `confessiones`). | Committee (brief); patristics scholar helpful. Folded into the patristics sub-spec (Issue 6). |
+| 16 | Clavis numbers; title language | Keep slugs as identifiers; clavis numbers (`cpg`, `cpl`) are required properties where they exist and alias keys (precedent: BKV keys works by clavis, e.g. CPL 251 = *Confessiones*). Clavis doesn't cover post-patristic works and is externally revised, so it can't be the identifier. **Resolve title-language inconsistency:** examples mix `confessions` (English) and `summa-theologiae` (Latin); proposal = standard Latin title from the clavis/standard reference (rename `confessions` → `confessiones`). | Committee (brief), then TAG review; patristics scholar helpful. Folded into the patristics sub-spec (Issue 6). |
 
 ### Suggested committee agenda order
 
@@ -75,6 +75,6 @@ Adopt this first: it reduces each related committee question to "which name is c
   (valid + invalid identifiers) and a CI step that asserts invalid ones fail
 - Resolutions for 5, 6, 10, 11, 12, 13, 14, 15 written into the relevant sections; those
   issues moved from `08-open-issues.md` into the CHANGELOG as resolved
-- Group B items drafted but marked **needs TAG / Board sign-off**
+- Group B items drafted but marked **needs TAG review**
 - Group C items: add each proposal under its issue in `08-open-issues.md` as
   "Editor's proposal" — do not change normative text
