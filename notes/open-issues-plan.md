@@ -44,8 +44,8 @@ Adopt this first: it reduces each related committee question to "which name is c
 | # | Proposal | Sign-off needed |
 |---|---|---|
 | 3 | Corrections never change the identifier (§2.3 rule 6). Response carries `textHistory`: dated text states with source (AAS ref / rescript); current authoritative text is default. Test case: `cdcf:ccc/2267` (2018 revision). A new act that changes an earlier one gets its own ID + new `cdcf:rel/amends` (MagisterialDoc → MagisterialDoc \| CCC). "As of" access is an API parameter (`?asOf=`), not an identifier. | TAG approval of the new `amends` rel (vocab change). |
-| 4 | Liturgy not a 1.0.0 domain; sub-spec `draft-cdcf-liturgy-00` (also home of calendar canonicalization). 1.0.0 only: reserve domain name `liturgy`; interim `citedIn` for `cdcf:rel/liturgical-use` = a `cdcf:work/` edition (e.g. `cdcf:work/missale-romanum-2002`). Sub-spec should align with existing Liturgical Calendar API event keys and Martyrology (`mr:`) IDs. | Committee confirms the roadmap deferral. |
-| 9 | Standalone `draft-cdcf-particular-law-00`. 1.0.0 only reserves `particular-law`; opening the closed `code` enum is handled in Issue 12. Likely shape `cdcf:particular-law/{legislator}/{instrument}/…`, legislator = institution identifier. | Committee confirms the deferral. |
+| 4 | Liturgy not a 1.0.0 domain; sub-spec `draft-cdcf-liturgy-00` (also home of calendar canonicalization). 1.0.0 only: reserve domain name `liturgy`; interim `citedIn` for `cdcf:rel/liturgical-use` = a `cdcf:work/` edition (e.g. `cdcf:work/missale-romanum-2002`). Sub-spec should align with existing Liturgical Calendar API event keys and Martyrology (`mr:`) IDs. | TAG confirms the roadmap deferral. |
+| 9 | Standalone `draft-cdcf-particular-law-00`. 1.0.0 only reserves `particular-law`; opening the closed `code` enum is handled in Issue 12. Likely shape `cdcf:particular-law/{legislator}/{instrument}/…`, legislator = institution identifier. | TAG confirms the deferral. |
 
 ### C. Committee — genuine judgment calls
 
@@ -75,6 +75,6 @@ Adopt this first: it reduces each related committee question to "which name is c
   (valid + invalid identifiers) and a CI step that asserts invalid ones fail
 - Resolutions for 5, 6, 10, 11, 12, 13, 14, 15 written into the relevant sections; those
   issues moved from `08-open-issues.md` into the CHANGELOG as resolved
-- Group B items drafted but marked **needs TAG review** or **committee** as applicable
+- Group B items drafted but marked **needs TAG review**
 - Group C items: add each proposal under its issue in `08-open-issues.md` as
   "Editor's proposal" — do not change normative text
