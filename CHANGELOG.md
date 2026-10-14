@@ -109,7 +109,7 @@ in the ontology), 18 (Roman Pontiffs / Doctors of the Church as list membership)
 
 ### Rationale
 
-- **Persons (G.1).** Board review observed that the person domain cannot work as a
+- **Persons (G.1).** TAG review observed that the person domain cannot work as a
   transparent identifier space. The Roman Pontiffs and the Doctors of the Church are
   closed lists with authoritative names and numbering, but persons in general are
   neither: no Church register settles their names, homonyms are common, and readable
