@@ -1,11 +1,9 @@
 name: "Validate cdcf: spec"
 
 on:
+  # No path filter: `validate` is a required status check on main, so it must
+  # report on every pull request or PRs that skip it can never merge.
   pull_request:
-    paths:
-      - 'spec/**'
-      - 'examples/**'
-      - 'scripts/**'
   push:
     branches: [main]
 
