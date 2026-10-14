@@ -2,7 +2,7 @@
 
 Each issue below is tracked as its own GitHub Issue (linked after its title) rather
 than resolved solely by editing this file — see `README.md` § *How to propose a change*.
-GitHub numbers its issues independently (Open Issue 1 is GitHub #2); always cite the Open
+GitHub numbers its issues independently (Open Issue 16 is GitHub #8); always cite the Open
 Issue number in the specification.
 
 Issues keep their numbers once assigned. Resolved issues are removed from this list and
@@ -11,36 +11,36 @@ below.
 
 ## Carried from version 0.1.0
 
-1. **Psalm numbering** ([#2](https://github.com/xudonglab/cdcf-uri-scheme-update/issues/2)) — Vulgate vs. Hebrew as primary? Should both be first-class
+1. **Psalm numbering** ([#1](https://github.com/CatholicOS/cdcf-uri-scheme/issues/1)) — Vulgate vs. Hebrew as primary? Should both be first-class
    identifiers with an explicit mapping?
-2. **Deuterocanonical books** ([#3](https://github.com/xudonglab/cdcf-uri-scheme-update/issues/3)) — the Catholic canon is normative here. Should Protestant
+2. **Deuterocanonical books** ([#2](https://github.com/CatholicOS/cdcf-uri-scheme/issues/2)) — the Catholic canon is normative here. Should Protestant
    versification be supported as a secondary mapping?
-3. **Amended magisterial documents** ([#4](https://github.com/xudonglab/cdcf-uri-scheme-update/issues/4)) — sub-identifiers or replacement documents for
+3. **Amended magisterial documents** ([#3](https://github.com/CatholicOS/cdcf-uri-scheme/issues/3)) — sub-identifiers or replacement documents for
    post-promulgation corrections (e.g., footnote corrections in apostolic exhortations)?
-4. **Liturgical domain** ([#5](https://github.com/xudonglab/cdcf-uri-scheme-update/issues/5)) — are there dependencies that require addressing the liturgical
+4. **Liturgical domain** ([#4](https://github.com/CatholicOS/cdcf-uri-scheme/issues/4)) — are there dependencies that require addressing the liturgical
    domain in version 1.0.0, rather than deferring it?
 
 ## Carried from version 0.2.0
 
-7. **Dicastery approval disputes** ([#6](https://github.com/xudonglab/cdcf-uri-scheme-update/issues/6)) — should a `disputedApproval` flag be added for
+7. **Dicastery approval disputes** ([#5](https://github.com/CatholicOS/cdcf-uri-scheme/issues/5)) — should a `disputedApproval` flag be added for
    `papalApproval` values where the approval mode is theologically contested?
-8. **Eastern theological concepts** ([#7](https://github.com/xudonglab/cdcf-uri-scheme-update/issues/7)) — separate identifiers for Eastern equivalents
+8. **Eastern theological concepts** ([#6](https://github.com/CatholicOS/cdcf-uri-scheme/issues/6)) — separate identifiers for Eastern equivalents
    (*theosis*, *epiclesis*), or an `easternEquivalents` field on the Latin-rite
    identifier?
-9. **Particular law** ([#8](https://github.com/xudonglab/cdcf-uri-scheme-update/issues/8)) — a `cdcf:particular-law/` domain in version 1.0.0, or a
+9. **Particular law** ([#7](https://github.com/CatholicOS/cdcf-uri-scheme/issues/7)) — a `cdcf:particular-law/` domain in version 1.0.0, or a
    standalone sub-specification?
 
 ## New in version 0.5.0 [REV-04]
 
-16. **Patristic work identifiers** ([#9](https://github.com/xudonglab/cdcf-uri-scheme-update/issues/9)) — should `cdcf:work/` identifiers for patristic texts
+16. **Patristic work identifiers** ([#8](https://github.com/CatholicOS/cdcf-uri-scheme/issues/8)) — should `cdcf:work/` identifiers for patristic texts
     be keyed to established clavis numbers (*Clavis Patrum Graecorum* / *Latinorum*)
     rather than author-qualified title slugs ([§3.6](03-domains.md#36-works-cdcfwork-rev-04))?
     *(To be taken up by `draft-cdcf-patristics-00`,
     [§6.5.1](06-governance.md#651-chartered-sub-specifications-new--rev-05).)*
-17. **Person IRIs in the ontology** ([#10](https://github.com/xudonglab/cdcf-uri-scheme-update/issues/10)) — what allocation pattern and prefix should the CDCF
+17. **Person IRIs in the ontology** ([#9](https://github.com/CatholicOS/cdcf-uri-scheme/issues/9)) — what allocation pattern and prefix should the CDCF
     ontology use for person individuals, and should it offer a notation-lookup
     convenience equivalent to §3.5.2?
-18. **Closed person lists** ([#11](https://github.com/xudonglab/cdcf-uri-scheme-update/issues/11)) — how should the existing Roman Pontiffs and Doctors of the
+18. **Closed person lists** ([#10](https://github.com/CatholicOS/cdcf-uri-scheme/issues/10)) — how should the existing Roman Pontiffs and Doctors of the
     Church datasets be expressed as role or list membership of ontology individuals
     ([§3.6.1](03-domains.md#361-persons-as-ontology-individuals-new--rev-04)(c)), and how
     do their current identifiers map to `skos:notation` values?
