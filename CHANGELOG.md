@@ -68,6 +68,17 @@ their numbers.
 - `cdcf:magisterium/trent/decree-justification` → `cdcf:magisterium/trent/decretum-de-iustificatione`
 - `cdcf:magisterium/trent/decree-eucharist` → `cdcf:magisterium/trent/decretum-de-sanctissimo-eucharistiae-sacramento`
 
+**Review outcome** (recorded 2026-10-13, when these changes were merged):
+- **`cdcf:rel/` vocabulary — accepted for now.** Moving the relationship-type values out of
+  the grammar into the §3.8.2 registry table was flagged for TAG review. No value was
+  added, removed or redefined.
+- **Trent slug spelling — accepted provisionally.** `decretum-de-iustificatione` has not
+  yet been checked against a specific edition (`iustificatione` vs. `justificatione`).
+  §3.2.4 does not yet say which edition counts as the typical edition of conciliar acts
+  that exist in several (e.g. the 1564 Roman edition, the Görres-Gesellschaft
+  *Concilium Tridentinum*, COD/COGD). Once one is chosen, the slug may still be renamed,
+  since no identifier has reached a stable release.
+
 **Repo changes:** `scripts/lib/abnf.js` is a dependency-free RFC 5234 parser and
 matcher. `validate-grammar.js` now parses the grammar properly and rejects `=/` without
 `=`. `validate-identifiers.js` checks identifiers against the grammar itself plus the
