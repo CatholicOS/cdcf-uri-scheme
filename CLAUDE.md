@@ -84,9 +84,9 @@ sign-off (§6.3, `CODEOWNERS`). Draft them if asked, but flag them clearly as
 - roadmap deferrals: whether liturgy and particular law become 1.0.0 domains or
   sub-specifications (Open Issues 4 and 9)
 
-Every remaining Open Issue carries the `needs TAG review` label on GitHub; issues that
-also need committee discussion before drafting carry `committee`. There is no Board
-sign-off step.
+Every remaining Open Issue carries the `needs TAG review` label on GitHub; the formal
+Open Issues of `spec/08-open-issues.md` also carry `open-issue`. The TAG is the only
+sign-off step: there is no separate committee or Board sign-off.
 
 Do not invent `authorityLevel` values or theological claims in examples.
 

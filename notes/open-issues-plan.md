@@ -22,7 +22,7 @@ GET /{domain}?{scheme}={value}  →  303 See Other, Location: <canonical IRI>
 - Applications MUST store the canonical IRI, never the alias (as §3.5.2 already says).
 - §3.5.2 becomes the `notation` scheme of this general mechanism.
 
-Adopt this first: it reduces each related committee question to "which name is canonical".
+Adopt this first: it reduces each related TAG question to "which name is canonical".
 
 ## Triage
 
@@ -47,19 +47,19 @@ Adopt this first: it reduces each related committee question to "which name is c
 | 4 | Liturgy not a 1.0.0 domain; sub-spec `draft-cdcf-liturgy-00` (also home of calendar canonicalization). 1.0.0 only: reserve domain name `liturgy`; interim `citedIn` for `cdcf:rel/liturgical-use` = a `cdcf:work/` edition (e.g. `cdcf:work/missale-romanum-2002`). Sub-spec should align with existing Liturgical Calendar API event keys and Martyrology (`mr:`) IDs. | TAG confirms the roadmap deferral. |
 | 9 | Standalone `draft-cdcf-particular-law-00`. 1.0.0 only reserves `particular-law`; opening the closed `code` enum is handled in Issue 12. Likely shape `cdcf:particular-law/{legislator}/{instrument}/…`, legislator = institution identifier. | TAG confirms the deferral. |
 
-### C. Committee — genuine judgment calls
+### C. TAG — genuine judgment calls
 
-| # | Question for the committee | Editor's proposal | Who must weigh in |
+| # | Question for the TAG | Editor's proposal | Who must weigh in |
 |---|---|---|---|
-| 18 | Popes / Doctors of the Church modelling | One ontology individual per person. Existing dataset IDs (`rp:`, `doct:`) become `skos:notation` literals in their own declared datatypes **and** alias lookup keys — every published ID keeps resolving. Pontificate = dated BFO role with ordinal; doctorate = status conferred by a dated act linked to its `cdcf:magisterium/` document; succession = `skos:OrderedCollection`. Ordinal is a property of a cited list (e.g. *Annuario Pontificio*), since numbering is contested (Stephen II/III). Avoids one person becoming two entities (Leo the Great, Gregory the Great). | Coordinate with the maintainers of the existing Popes/Doctors datasets before the meeting. |
+| 18 | Popes / Doctors of the Church modelling | One ontology individual per person. Existing dataset IDs (`rp:`, `doct:`) become `skos:notation` literals in their own declared datatypes **and** alias lookup keys — every published ID keeps resolving. Pontificate = dated BFO role with ordinal; doctorate = status conferred by a dated act linked to its `cdcf:magisterium/` document; succession = `skos:OrderedCollection`. Ordinal is a property of a cited list (e.g. *Annuario Pontificio*), since numbering is contested (Stephen II/III). Avoids one person becoming two entities (Leo the Great, Gregory the Great). | Coordinate with the maintainers of the existing Popes/Doctors datasets before the TAG review. |
 | 17 | Person IRI allocation | `PN` + number under the ontology base IRI (pending ontology naming decision), same padding/allocation rules as `CN`. Type prefix is acceptable because "person" is rigid in BFO; roles/statuses never appear in IDs. Lookup by `notation` and `wikidata`. Person notations may carry disambiguators (they are labels, not identity). | Decide jointly with the ontology prefix / base-IRI decision. |
 | 7 | `disputedApproval` | No boolean. Make `papalApproval` structured: `{ "value", "basis": <quoted approval formula>, "source" }`; add value `unspecified`. Scholarly disagreement goes in the non-doctrinal annotation layer. Spec's own *Fiducia Supplicans* example is a live test case. | A qualified canonist — required before this can close. |
 | 1 | Psalm numbering | Keep Vulgate canonical; Hebrew via `v11n` alias. Replace `psalmNumberingMap` with verse-level `versificationMap` (superscriptions shift verse numbers; Pss 9–10, 114–116, 147 split/merge). Source mappings from an established dataset (e.g. CrossWire SWORD versification tables). Counter-argument: modern Catholic vernacular Bibles (NABRE, RSV-CE) use Hebrew numbering. | Theologian/liturgist; existing BibleGet practice. |
 | 2 | Deuterocanon / Eastern canons | Catholic book structure normative (`cdcf:verse/dan/13/1`); OSIS separate-book IDs (`sus`, `bel`, `prazar`, `addesth`, `epjer`) invalid as `cdcf:book/`, resolve via alias; `osis-book` becomes a registered list. Books read in some Eastern traditions (3 Maccabees, Psalm 151, Prayer of Manasseh) get IDs with per-tradition `canonicalStatus`. | Eastern Catholic theologian for the per-tradition statuses. |
 | 8 | Eastern concepts | Separate CN concepts (not an `easternEquivalents` field, which privileges the Latin concept and asserts contested equivalence). Link with within-scheme SKOS (`skos:related`, `skos:broader`); `skos:exactMatch` stays reserved for external vocabularies (§2.6). | Eastern and Latin theologians. |
-| 16 | Clavis numbers; title language | Keep slugs as identifiers; clavis numbers (`cpg`, `cpl`) are required properties where they exist and alias keys (precedent: BKV keys works by clavis, e.g. CPL 251 = *Confessiones*). Clavis doesn't cover post-patristic works and is externally revised, so it can't be the identifier. **Resolve title-language inconsistency:** examples mix `confessions` (English) and `summa-theologiae` (Latin); proposal = standard Latin title from the clavis/standard reference (rename `confessions` → `confessiones`). | Committee (brief), then TAG review; patristics scholar helpful. Folded into the patristics sub-spec (Issue 6). |
+| 16 | Clavis numbers; title language | Keep slugs as identifiers; clavis numbers (`cpg`, `cpl`) are required properties where they exist and alias keys (precedent: BKV keys works by clavis, e.g. CPL 251 = *Confessiones*). Clavis doesn't cover post-patristic works and is externally revised, so it can't be the identifier. **Resolve title-language inconsistency:** examples mix `confessions` (English) and `summa-theologiae` (Latin); proposal = standard Latin title from the clavis/standard reference (rename `confessions` → `confessiones`). | TAG review; patristics scholar helpful. Folded into the patristics sub-spec (Issue 6). |
 
-### Suggested committee agenda order
+### Suggested TAG agenda order
 
 1. Issues 18 + 17 together (shared principle; block person data).
 2. Issue 7 — note that a qualified canonist reviewer is needed to close it.
